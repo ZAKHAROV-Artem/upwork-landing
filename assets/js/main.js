@@ -138,16 +138,14 @@ class Quiz {
     if (this.currentQuestionIndex < this.quizData.length) {
       const question = this.quizData[this.currentQuestionIndex];
 
-      // Create new question content
+      // Create new question content - REMOVED INLINE STYLES for opacity/transform
       const newQuestionHTML = `
-        <div class="quiz-question" style="opacity: 0; transform: translateY(20px);">${
-          question.question
-        }</div>
+        <div class="quiz-question">${question.question}</div>
         <div class="quiz-answers">
           ${question.answer
             .map(
               (answer, index) => `
-                <div class="quiz-answer" data-answer-index="${index}" style="opacity: 0; transform: translateY(20px);">
+                <div class="quiz-answer" data-answer-index="${index}">
                     ${answer}
                 </div>
               `
@@ -186,8 +184,8 @@ class Quiz {
             this.quizContainer.innerHTML = newQuestionHTML;
             nextQuestionContainer.remove();
 
-            // Animate new content in
-            this.animateQuestionContent();
+            // Animate new content in (handled by MutationObserver in animations.js)
+            // this.animateQuestionContent();
 
             // Attach event listeners to the quiz answers
             this.attachAnswerListeners(onAnswerSelect);
@@ -198,15 +196,26 @@ class Quiz {
 
         // Animate current question out
         timeline.add({
-          targets: this.quizContainer.querySelectorAll(
-            ".quiz-question, .quiz-answer"
-          ),
+          targets: this.quizContainer.querySelectorAll(".quiz-question"),
           opacity: [1, 0],
-          translateX: [0, -30],
-          duration: 400,
-          easing: "easeOutQuad",
-          delay: anime.stagger(50),
+          translateX: [0, -40],
+          duration: 350,
+          easing: "easeInQuad",
         });
+
+        // Animate current answers out (staggered slide down and fade)
+        timeline.add(
+          {
+            targets: this.quizContainer.querySelectorAll(".quiz-answer"),
+            opacity: [1, 0],
+            translateY: [0, 25],
+            scale: [1, 0.95],
+            duration: 300,
+            easing: "easeInQuad",
+            delay: anime.stagger(50),
+          },
+          "-=300"
+        );
 
         // Update counter during transition
         this.updateQuestionCounter();
@@ -227,22 +236,21 @@ class Quiz {
 
   // Animate the question content
   animateQuestionContent() {
-    anime({
-      targets: this.quizContainer.querySelector(".quiz-question"),
-      opacity: [0, 1],
-      translateY: [20, 0],
-      duration: 500,
-      easing: "easeOutQuad",
-    });
-
-    anime({
-      targets: this.quizContainer.querySelectorAll(".quiz-answer"),
-      opacity: [0, 1],
-      translateY: [20, 0],
-      duration: 500,
-      delay: anime.stagger(100, { start: 200 }),
-      easing: "easeOutQuad",
-    });
+    // anime({
+    //   targets: this.quizContainer.querySelector(".quiz-question"),
+    //   opacity: [0, 1],
+    //   translateY: [20, 0],
+    //   duration: 500,
+    //   easing: "easeOutQuad",
+    // });
+    // anime({
+    //   targets: this.quizContainer.querySelectorAll(".quiz-answer"),
+    //   opacity: [0, 1],
+    //   translateY: [20, 0],
+    //   duration: 500,
+    //   delay: anime.stagger(100, { start: 200 }),
+    //   easing: "easeOutQuad",
+    // });
   }
 
   // Update the question counter with animation
@@ -1037,6 +1045,7 @@ class SectionManager {
 
     this.currentSection = null;
     this.animationInProgress = false;
+    this.activeTimeline = null; // Added to keep track of the current animation timeline
 
     // Validate sections exist
     for (const key in this.sections) {
@@ -1053,38 +1062,110 @@ class SectionManager {
       return;
     }
 
-    // If same section or animation in progress, do nothing
-    if (this.currentSection === sectionKey || this.animationInProgress) {
+    // If trying to show the same section and no animation is in progress, do nothing.
+    if (this.currentSection === sectionKey && !this.animationInProgress) {
       return;
     }
 
-    this.animationInProgress = true;
-    const currentSectionElement = this.currentSection
-      ? this.sections[this.currentSection]
-      : null;
+    // If an animation is already in progress for the *target* sectionKey, let it finish.
+    if (this.currentSection === sectionKey && this.animationInProgress) {
+      return;
+    }
+
+    // If an animation is in progress (for a different section or any other reason),
+    // stop it and reset states before starting the new one.
+    if (this.animationInProgress) {
+      if (this.activeTimeline) {
+        this.activeTimeline.pause(); // Pause the current timeline
+      }
+      // Stop all anime.js animations on all managed section elements
+      Object.values(this.sections).forEach((sectionElement) => {
+        if (sectionElement) {
+          anime.remove(sectionElement);
+          // Reset styles to a known hidden state
+          sectionElement.classList.add("d-none");
+          sectionElement.style.opacity = "0";
+          sectionElement.style.visibility = "hidden"; // Ensure it's fully hidden
+        }
+      });
+      this.animationInProgress = false; // We've stopped/reset.
+      this.activeTimeline = null;
+    }
+
+    // Determine the currently visually displaying section to fade it out.
+    let currentVisualSectionElement = null;
+    // this.currentSection might be the logical target of a previously interrupted animation.
+    // So, iterate to find the truly visible one.
+    for (const key in this.sections) {
+      const el = this.sections[key];
+      // Check if element exists, is not d-none, and has some opacity or is the current logical section (if not the target)
+      if (
+        el &&
+        ((!el.classList.contains("d-none") &&
+          parseFloat(el.style.opacity) > 0) ||
+          (this.currentSection === key && key !== sectionKey))
+      ) {
+        if (key !== sectionKey) {
+          // Ensure it's not the target section itself
+          currentVisualSectionElement = el;
+          break;
+        }
+      }
+    }
+    // Fallback if no specific visual section found, but a logical `this.currentSection` exists and it's not the target
+    if (
+      !currentVisualSectionElement &&
+      this.currentSection &&
+      this.currentSection !== sectionKey &&
+      this.sections[this.currentSection]
+    ) {
+      currentVisualSectionElement = this.sections[this.currentSection];
+    }
+
+    this.animationInProgress = true; // Set for the new animation
     const targetSection = this.sections[sectionKey];
 
-    // Animation sequence
     const timeline = anime.timeline({
       easing: "easeOutQuad",
       complete: () => {
         this.animationInProgress = false;
+        this.activeTimeline = null; // Clear the active timeline
       },
     });
+    this.activeTimeline = timeline; // Store the new active timeline
 
-    // 1. Fade out current section if any
-    if (currentSectionElement) {
-      timeline.add({
-        targets: currentSectionElement,
-        opacity: [1, 0],
-        translateY: [0, -20],
-        scale: [1, 0.98],
-        duration: 300,
-        easing: "easeOutQuad",
-        complete: () => {
-          currentSectionElement.classList.add("d-none");
-        },
-      });
+    // 1. Fade out the current visually displaying section, if any and it's not the target.
+    if (
+      currentVisualSectionElement &&
+      currentVisualSectionElement !== targetSection
+    ) {
+      // Ensure the element is actually in a state to be faded out
+      const initialOpacity = parseFloat(
+        currentVisualSectionElement.style.opacity
+      );
+      // Check if it's not already hidden or fully transparent
+      if (
+        !currentVisualSectionElement.classList.contains("d-none") ||
+        isNaN(initialOpacity) ||
+        initialOpacity > 0
+      ) {
+        timeline.add({
+          targets: currentVisualSectionElement,
+          opacity: [isNaN(initialOpacity) ? 1 : initialOpacity, 0], // Animate from current or 1, to 0
+          translateY: [0, -20], // Assuming it starts at Y:0
+          scale: [1, 0.98],
+          duration: 300,
+          easing: "easeOutQuad",
+          complete: () => {
+            currentVisualSectionElement.classList.add("d-none");
+            currentVisualSectionElement.style.opacity = "0"; // Explicitly set final state
+          },
+        });
+      } else {
+        // If it was already effectively hidden, just ensure d-none is set.
+        currentVisualSectionElement.classList.add("d-none");
+        currentVisualSectionElement.style.opacity = "0";
+      }
     }
 
     // 2. Fade in target section
@@ -1099,22 +1180,35 @@ class SectionManager {
         begin: () => {
           // Prepare target section for animation
           targetSection.classList.remove("d-none");
-          targetSection.style.opacity = "0";
-          targetSection.style.visibility = "visible";
+          targetSection.style.opacity = "0"; // Set initial opacity for fade-in
+          targetSection.style.visibility = "visible"; // Ensure it's visible
+
+          // Ensure all other sections (except the one fading out, if any) are definitively hidden
+          for (const key in this.sections) {
+            if (
+              this.sections[key] &&
+              key !== sectionKey &&
+              this.sections[key] !== currentVisualSectionElement
+            ) {
+              this.sections[key].classList.add("d-none");
+              this.sections[key].style.opacity = "0";
+            }
+          }
         },
       },
-      currentSectionElement ? "+=50" : 0
-    ); // Small delay between transitions if there's a current section
+      currentVisualSectionElement &&
+        currentVisualSectionElement !== targetSection
+        ? "+=50"
+        : 0 // Offset if a fade-out happened
+    );
 
-    // Update current section reference
-    this.currentSection = sectionKey;
+    this.currentSection = sectionKey; // Update logical current section
 
     // Scroll to top of page
     document
       .getElementById("page-content")
       .scrollIntoView({ behavior: "smooth" });
 
-    // Return the timeline for potential chaining
     return timeline;
   }
 
@@ -1160,24 +1254,37 @@ document.addEventListener("DOMContentLoaded", () => {
     if (startQuizButton) {
       startQuizButton.addEventListener("click", () => {
         sectionManager.showSection("startQuiz");
-        timer.show();
-        timer.start(() => {
-          sectionManager.showSection("unaccepted");
-        });
 
-        // Handle quiz answers
-        quiz.loadQuestion((status, isValid) => {
-          if (status === "invalid") {
-            timer.stop();
-            sectionManager.showSection("unaccepted");
-          } else if (status === "completed") {
-            // Show loading after quiz completion
-            sectionManager.showSection("afterQuiz");
-            loading.addCheckMarks(() => {
-              sectionManager.showSection("finalPage");
-            });
+        // Small delay to ensure section is visible before loading quiz
+        setTimeout(() => {
+          // Make sure the question counter is updated and visible
+          const questionCounter = document.getElementById(
+            "question-counter-number"
+          );
+          if (questionCounter) {
+            questionCounter.textContent = "1";
           }
-        });
+
+          // Handle quiz answers
+          quiz.loadQuestion((status, isValid) => {
+            if (status === "invalid") {
+              timer.stop();
+              sectionManager.showSection("unaccepted");
+            } else if (status === "completed") {
+              // Show loading after quiz completion
+              sectionManager.showSection("afterQuiz");
+              loading.addCheckMarks(() => {
+                sectionManager.showSection("finalPage");
+              });
+            }
+          });
+
+          // Show timer after quiz is loaded
+          timer.show();
+          timer.start(() => {
+            sectionManager.showSection("unaccepted");
+          });
+        }, 100);
       });
     }
 
@@ -1186,9 +1293,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (startAgainButton) {
       startAgainButton.addEventListener("click", () => {
-        sectionManager.showSection("beforeQuiz");
         quiz.reset();
         timer.reset();
+        sectionManager.showSection("beforeQuiz");
       });
     }
   } catch (error) {

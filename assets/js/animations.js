@@ -52,7 +52,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Simplify section transition handling
-  setupSectionTransitions();
 
   // Add special handlers for all dynamic sections to fix visibility issues
   ["after-quiz", "final-page", "unaccepted"].forEach(function (sectionId) {
@@ -326,13 +325,20 @@ function handleSectionSpecificAnimations(sectionId) {
             );
 
             if (quizQuestion && !quizQuestion.hasAttribute("data-animated")) {
+              // Set initial state for the question before animating
+              anime.set(quizQuestion, {
+                opacity: 0,
+                translateY: 25,
+                scale: 0.9,
+              });
               // Animate the question
               anime({
                 targets: quizQuestion,
                 opacity: [0, 1],
-                translateY: [20, 0],
-                duration: 800,
-                easing: "easeOutQuad",
+                translateY: [25, 0],
+                scale: [0.9, 1],
+                duration: 900,
+                easing: "easeOutExpo",
               });
               quizQuestion.setAttribute("data-animated", "true");
             }
@@ -341,14 +347,21 @@ function handleSectionSpecificAnimations(sectionId) {
               quizAnswers.length > 0 &&
               !quizAnswers[0].hasAttribute("data-animated")
             ) {
-              // Animate the answers with staggered delay
+              // Set initial state for answers before animating
+              anime.set(quizAnswers, {
+                opacity: 0,
+                translateY: 15,
+                scale: 0.95,
+              });
+              // Animate the answers with staggered delay - SMOOTHER ANIMATION
               anime({
                 targets: quizAnswers,
                 opacity: [0, 1],
-                translateY: [20, 0],
-                duration: 800,
-                easing: "easeOutQuad",
-                delay: anime.stagger(150),
+                translateY: [15, 0],
+                scale: [0.95, 1],
+                duration: 1000,
+                easing: "easeOutExpo",
+                delay: anime.stagger(180),
               });
               quizAnswers.forEach((answer) => {
                 answer.setAttribute("data-animated", "true");
@@ -446,45 +459,6 @@ document.addEventListener("DOMContentLoaded", function () {
     delay: 400,
   });
 });
-
-// Set up simplified section transitions to avoid duplicate animations
-function setupSectionTransitions() {
-  // Store previous functions to call if they exist
-  const originalShowSection = window.showSection;
-
-  // Create simplified section transition function that doesn't duplicate animations
-  window.showSection = function (sectionToShow) {
-    // Find current visible section
-    let currentSection = null;
-    document.querySelectorAll(".content-section").forEach(function (section) {
-      if (!section.classList.contains("d-none")) {
-        currentSection = section.id;
-      }
-    });
-
-    // Hide all sections first
-    document.querySelectorAll(".content-section").forEach(function (section) {
-      section.classList.add("d-none");
-      section.style.opacity = "0";
-    });
-
-    // Show the requested section
-    const targetSection = document.getElementById(sectionToShow);
-    targetSection.classList.remove("d-none");
-
-    // Reset animation state for new section
-    anime.set("#" + sectionToShow, {
-      opacity: 0,
-      translateY: 20,
-      scale: 0.98,
-    });
-
-    // Call original showSection if it exists
-    if (typeof originalShowSection === "function") {
-      originalShowSection(sectionToShow);
-    }
-  };
-}
 
 // Logo animation
 let logoRotations = 0;
