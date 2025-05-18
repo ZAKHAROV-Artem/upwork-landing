@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop Smart Program</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      />
+    </noscript>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+  </head>
+  <body>
+    <div class="page-content mx-auto" id="page-content">
+      <!-- Timer -->
+      <div class="sticky-container1">
+        <div class="timer text-center" id="timer">
+          <div class="timer-text" id="timer1">
+            YOUR PLACE IS SECURED FOR
+            <span
+              id="timer-count"
+              style="color: #cccccc; font-weight: bold"
+            ></span>
+          </div>
+          <div class="timer-text d-none" id="timer-done">
+            YOUR PLACE IS NO LONGER RESERVED, BUT YOU CAN STILL TRY...
+          </div>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <header>
+        <div class="container-fluid">
+          <div
+            class="header-content d-flex justify-content-between align-items-center"
+            id="header-content"
+          >
+            <div class="logo-container">
+              <a href="index.html">
+                <img
+                  src="assets/img/logo.png"
+                  alt="Shop Smart Program"
+                  class="logo js"
+                />
+              </a>
+            </div>
+
+            <div class="faq-container">
+              <button
+                class="faq-button"
+                id="faq-trigger"
+                aria-label="Frequently Asked Questions"
+              >
+                <i class="material-icons">help</i>
+                <span>FAQ</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- FAQ Modal - Moved outside header for proper display -->
+      <div class="modal-overlay" id="faqModal">
+        <div class="modal-content">
+          <div class="close-icon" id="closeModal">❌</div>
+          <div class="faq-title">Frequently Asked Questions</div>
+          <div class="faq-list">
+            <div class="faq-item" id="faq1">
+              <div class="faq-question">
+                What are the participation requirements?
+              </div>
+              <div class="faq-answer">
+                You must be over 18 years old and live in the US. This program
+                is exclusively available for US residents who meet all
+                eligibility criteria.
+              </div>
+            </div>
+
+            <div class="faq-item" id="faq2">
+              <div class="faq-question">What can I get from this program?</div>
+              <div class="faq-answer">
+                By participating, you can receive a $750 Aldi gift card that can
+                be used at any Aldi location in the United States. This is a
+                limited-time offer with restricted availability.
+              </div>
+            </div>
+
+            <div class="faq-item" id="faq3">
+              <div class="faq-question">
+                What happens if I apply without meeting the requirements?
+              </div>
+              <div class="faq-answer">
+                Applicants who do not meet the requirements will not be accepted
+                into the program. We verify all submissions to ensure compliance
+                with our eligibility criteria.
+              </div>
+            </div>
+
+            <div class="faq-item" id="faq4">
+              <div class="faq-question">
+                How long does it take to receive the gift card?
+              </div>
+              <div class="faq-answer">
+                We guarantee delivery of your $750 Aldi gift card within 5 days
+                after successfully completing the application process and
+                meeting all requirements.
+              </div>
+            </div>
+
+            <div class="faq-item" id="faq5">
+              <div class="faq-question">
+                How often is this promotion available?
+              </div>
+              <div class="faq-answer">
+                The Shop Smart Program runs periodically throughout the year
+                with limited availability. We recommend completing the
+                application process promptly to secure your spot.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Sections Wrapper -->
+      <div class="sections-wrapper position-relative">
+        <section id="before-quiz" class="content-section">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- Left column for text content -->
+              <div
+                class="col-md-6 d-flex flex-column justify-content-center text-content"
+              >
+                <div class="page-title larger-text">
+                  Exciting times! You are one of the first to join the Shop
+                  Smart Program!
+                </div>
+                <p class="pt-3 larger-text">
+                  Answer 3 simple questions about your shopping routine, and get
+                  a <mark>$750 Aldi Gift Card</mark>. Don't miss out on this
+                  fantastic offer!
+                </p>
+                <p class="larger-text">
+                  Excited to get more from your shopping? Click on the
+                  <mark>START</mark> button below.
+                </p>
+                <p class="larger-text">
+                  You will have exactly <strong>3 minutes</strong> to secure
+                  your reward.
+                </p>
+              </div>
+
+              <!-- Right column for image and button -->
+              <div
+                class="col-md-6 d-flex flex-column justify-content-center align-items-center"
+              >
+                <div class="image-container mb-4">
+                  <img
+                    src="assets/img/image.webp"
+                    alt="Product"
+                    class="main-image img-fluid"
+                  />
+                </div>
+                <div id="start-quiz-button" class="start-button text-center">
+                  START
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Start Quiz -->
+        <section id="start-quiz" class="content-section d-none">
+          <div id="question-counter" class="question-counter">
+            <mark
+              >Question <span id="question-counter-number">-</span> / 3</mark
+            >
+          </div>
+          <div id="quiz-models"></div>
+        </section>
+
+        <!-- Unaccepted -->
+        <section id="unaccepted" class="content-section d-none">
+          <div class="unaccepted-modal mx-auto">
+            <div class="unaccepted-modal-title text-center mb-2">
+              We're sorry
+            </div>
+            <div class="unaccepted-modal-text">
+              Based on your quiz answers, you are not suitable for the
+              requirements of this program. If you want to retake the quiz,
+              click the button below:
+            </div>
+            <div id="start-again" class="try-again-button mx-auto text-center">
+              TRY AGAIN
+            </div>
+          </div>
+        </section>
+
+        <!-- After Quiz -->
+        <section
+          id="after-quiz"
+          class="content-section d-none d-flex flex-column align-items-center"
+        >
+          <div class="loading-title text-center mx-auto">
+            <mark>Thanks for your time!</mark>
+          </div>
+          <div class="loading-subtitle text-center mx-auto">
+            Please wait a few seconds while we process your responses.
+          </div>
+
+          <div class="loading-container">
+            <div class="loading-item">
+              <div class="loading-text" id="loading11">
+                Validating your answers..
+              </div>
+            </div>
+
+            <div class="loading-item">
+              <div class="loading-text" id="loading21">
+                Verifying eligibility..
+              </div>
+            </div>
+
+            <div class="loading-item">
+              <div class="loading-text" id="loading31">
+                21 gift cards left..
+              </div>
+            </div>
+
+            <div class="loading-item">
+              <div class="loading-text" id="loading41">
+                Securing your spot, hurry up..
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Final Page -->
+        <section id="final-page" class="content-section d-none">
+          <div class="final-page-title text-center mx-auto">
+            <mark>Congratulations!</mark>
+          </div>
+          <p class="pt-3">
+            Exciting news! Our stock is limited, but your place has been
+            secured. Claim your reward by following the steps below and receive
+            your <strong>$750 Aldi gift card</strong>!
+          </p>
+
+          <div class="d-flex justify-content-center image-container">
+            <img
+              src="assets/img/final-image.webp"
+              alt="Aldi Gift Card"
+              class="main-image"
+            />
+          </div>
+
+          <ol class="final-page-list mx-auto">
+            <li>
+              <strong
+                >Confirm your delivery details (click the "CONTINUE"
+                button):</strong
+              >
+              Let us know where we should send your exclusive
+              <mark>$750 Aldi Gift Card</mark>. Answer our sponsored questions
+              and provide your delivery address.
+            </li>
+            <li>
+              <strong>Unlock your DOUBLE reward:</strong> Complete our sponsored
+              deals. Each deal that you complete will increase your reward.
+            </li>
+            <li>
+              <strong>Prepare for the reveal:</strong> Your $750 Aldi Gift Card
+              will be delivered to your home. We guarantee delivery in just 5
+              days.
+            </li>
+            <li>
+              <strong
+                >Don't forget to confirm your participation by email!</strong
+              >
+            </li>
+          </ol>
+
+          <a href="https://link.tomyoffer.com/click" class="continue-button"
+            >CONTINUE</a
+          >
+        </section>
+      </div>
+
+      <!-- Rest of the page content -->
+      <div class="custom">
+        <!-- Comments -->
+        <div class="comments">
+          <p class="others-say">Read what others say about our program:</p>
+          <div class="sorting-box">
+            <p>3 Comments</p>
+            <div class="inner-sorting-box">
+              <div class="sort">
+                <select id="sort-comments" class="sort-select">
+                  <option value="newest">Newest</option>
+                  <option value="oldest">Oldest</option>
+                  <option value="most-liked">Most Liked</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="add-comment">
+            <textarea placeholder="Add a comment..."></textarea>
+            <div class="comment-button-box">
+              <div class="comment-button-left">
+                <label for="checkbox">What did you think of our program?</label>
+              </div>
+
+              <div class="comment-button-right">
+                <button class="disabled">Sign up to post</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="main-comments">
+            <!-- Empty state when no comments - will be hidden when comments exist -->
+            <div class="comments-empty-state d-none">
+              <i class="material-icons">chat_bubble_outline</i>
+              <p>No comments yet</p>
+              <span>Be the first to share your thoughts!</span>
+            </div>
+
+            <!-- Sample comments -->
+            <div class="comment">
+              <div class="comment-header">
+                <div class="comment-user-img">
+                  <img src="assets/img/logo-small.webp" alt="User" />
+                </div>
+                <div class="comment-user-info">
+                  <div class="comment-user-name">Sarah Johnson</div>
+                  <div class="comment-time">2 hours ago</div>
+                </div>
+              </div>
+              <div class="comment-text">
+                I received my gift card just as promised! This program is
+                fantastic and I recommend it to everyone.
+              </div>
+              <div class="comment-actions">
+                <button class="comment-action" title="Like">
+                  <i class="material-icons">thumb_up</i>
+                </button>
+                <button class="comment-action" title="Reply">
+                  <i class="material-icons">reply</i>
+                </button>
+                <div class="comment-likes">
+                  <i class="material-icons">favorite</i> 15
+                </div>
+              </div>
+            </div>
+
+            <div class="comment">
+              <div class="comment-header">
+                <div class="comment-user-img">
+                  <img src="assets/img/logo-small.webp" alt="User" />
+                </div>
+                <div class="comment-user-info">
+                  <div class="comment-user-name">Mike Brown</div>
+                  <div class="comment-time">5 hours ago</div>
+                </div>
+              </div>
+              <div class="comment-text">
+                Easy process and great gift card. Going to use it for my grocery
+                shopping this weekend.
+              </div>
+              <div class="comment-actions">
+                <button class="comment-action" title="Like">
+                  <i class="material-icons">thumb_up</i>
+                </button>
+                <button class="comment-action" title="Reply">
+                  <i class="material-icons">reply</i>
+                </button>
+                <div class="comment-likes">
+                  <i class="material-icons">favorite</i> 8
+                </div>
+              </div>
+            </div>
+
+            <div class="comment">
+              <div class="comment-header">
+                <div class="comment-user-img">
+                  <img src="assets/img/logo-small.webp" alt="User" />
+                </div>
+                <div class="comment-user-info">
+                  <div class="comment-user-name">Jennifer Adams</div>
+                  <div class="comment-time">1 day ago</div>
+                </div>
+              </div>
+              <div class="comment-text">
+                Was a bit skeptical at first, but it worked! My gift card
+                arrived within 3 days. Thanks Shop Smart Program!
+              </div>
+              <div class="comment-actions">
+                <button class="comment-action" title="Like">
+                  <i class="material-icons">thumb_up</i>
+                </button>
+                <button class="comment-action" title="Reply">
+                  <i class="material-icons">reply</i>
+                </button>
+                <div class="comment-likes">
+                  <i class="material-icons">favorite</i> 23
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="load-more">
+            <span>Load more comments</span>
+          </button>
+
+          <div class="comments-footer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path
+                fill="#2563eb"
+                d="M400 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h137.25V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.27c-30.81 0-40.42 19.12-40.42 38.73V256h68.78l-11 71.69h-57.78V480H400a48 48 0 0 0 48-48V80a48 48 0 0 0-48-48z"
+              ></path>
+            </svg>
+            <a href="#" target="_blank">Facebook Comments Plugin</a>
+          </div>
+        </div>
+
+        <!-- Added a Footer Section -->
+        <section class="footer-section">
+          <!-- Footer -->
+          <div class="footer-divider mb-3"></div>
+          <div
+            class="links-part d-flex justify-content-center align-items-center mb-3"
+          >
+            <img
+              src="assets/img/links-image.png"
+              alt="LEGAL LINKS"
+              class="links-image mr-1"
+            />
+            <div class="links-image-text ml-1">LEGAL LINKS</div>
+          </div>
+
+          <div
+            class="d-flex flex-column flex-lg-row justify-content-center align-items-center"
+          >
+            <a href="pages/terms-and-conditions/index.html" class="links"
+              >Terms and Conditions</a
+            >
+            <a href="pages/privacy-policy/index.html" class="links"
+              >Privacy Policy</a
+            >
+            <a href="pages/non-affiliation-disclaimer/index.html" class="links"
+              >Non-Affiliation Disclaimer</a
+            >
+          </div>
+
+          <div class="trade-names mx-auto mt-4">
+            <p class="text-center">
+              Trade names or rights associated with all trademarks on this
+              website are the property of their respective owners and are not
+              associated with this promotion.
+            </p>
+            <p class="text-center">
+              This website is not part of the Facebook website or of Facebook
+              Inc.
+            </p>
+          </div>
+
+          <footer
+            class="footer d-flex align-items-center justify-content-between flex-row mb-2"
+          >
+            <div class="footer-content pr-2 pr-md-0 text-center">
+              <p class="mb-0">
+                © 2025 Shop Smart Program. All rights reserved.
+              </p>
+            </div>
+            <div class="footer-content-logo pl-2 pl-md-0 text-right">
+              <img
+                src="assets/img/logo-small.webp"
+                alt="Shop Smart Program"
+                class="logo-small"
+              />
+            </div>
+          </footer>
+        </section>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- AnimeJS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+
+    <script src="assets/js/non-modular-main.js"></script>
+
+    <!-- Animation Script -->
+    <script>
+      // Set initial state for timer
+      document.addEventListener("DOMContentLoaded", function () {
+        // Add timer-hidden class initially
+        document
+          .querySelector(".sticky-container1")
+          .classList.add("timer-hidden");
+
+        // Set initial transform to avoid flash
+        anime.set(".sticky-container1", {
+          translateY: "-100%",
+          opacity: 0,
+        });
+
+        // Remove redundant observer that was causing duplicate animations
+        // We'll let the main section transitions handle animations instead
+
+        // Initialize other sections for later animation
+        anime.set(
+          ["#start-quiz", "#unaccepted", "#after-quiz", "#final-page"],
+          {
+            opacity: 0,
+            translateY: 20,
+          }
+        );
+
+        // Add entrance animations for comments and footer
+        anime.set(".comments", {
+          opacity: 0,
+          translateY: 25,
+          scale: 0.98,
+        });
+
+        anime({
+          targets: ".comments",
+          opacity: 1,
+          translateY: 0,
+          scale: 1,
+          duration: 700,
+          easing: "easeOutCubic",
+          delay: 600,
+        });
+
+        anime.set(".footer-section", {
+          opacity: 0,
+          translateY: 20,
+          scale: 0.98,
+        });
+
+        anime({
+          targets: ".footer-section",
+          opacity: 1,
+          translateY: 0,
+          scale: 1,
+          duration: 700,
+          easing: "easeOutCubic",
+          delay: 800,
+        });
+
+        // Simplify section transition handling
+        setupSectionTransitions();
+
+        // Add special handlers for all dynamic sections to fix visibility issues
+        ["after-quiz", "final-page", "unaccepted"].forEach(function (
+          sectionId
+        ) {
+          const section = document.getElementById(sectionId);
+          if (section) {
+            // Create a mutation observer for the section
+            const sectionObserver = new MutationObserver(function (mutations) {
+              mutations.forEach(function (mutation) {
+                if (mutation.attributeName === "class") {
+                  const classList = section.classList;
+                  if (
+                    !classList.contains("d-none") &&
+                    section.style.opacity !== "1"
+                  ) {
+                    // Section is now visible but not yet animated - animate it once
+                    anime({
+                      targets: "#" + sectionId,
+                      opacity: 1,
+                      translateY: 0,
+                      scale: 1,
+                      duration: 600,
+                      easing: "easeOutCubic",
+                    });
+
+                    // Section-specific animations
+                    handleSectionSpecificAnimations(sectionId);
+                  }
+                }
+              });
+            });
+
+            // Start observing
+            sectionObserver.observe(section, { attributes: true });
+          }
+        });
+
+        // Handle comment sorting functionality
+        const sortCommentsSelect = document.getElementById("sort-comments");
+        if (sortCommentsSelect) {
+          sortCommentsSelect.addEventListener("change", function () {
+            sortComments(this.value);
+          });
+
+          // Trigger sort on page load with initial value
+          sortComments(sortCommentsSelect.value);
+
+          // Initialize the comment buttons
+          initializeCommentButtons();
+        }
+      });
+
+      // Function to sort comments based on selected option
+      function sortComments(sortBy) {
+        const commentsContainer = document.querySelector(".main-comments");
+        const comments = Array.from(
+          commentsContainer.querySelectorAll(".comment:not(.d-none)")
+        );
+
+        if (comments.length === 0) return; // No comments to sort
+
+        comments.sort((a, b) => {
+          switch (sortBy) {
+            case "newest":
+              // Sort by date (newest first)
+              // Convert time strings to comparable values - simple parsing for demo
+              const timeA = parseTimeAgo(
+                a.querySelector(".comment-time").textContent
+              );
+              const timeB = parseTimeAgo(
+                b.querySelector(".comment-time").textContent
+              );
+              return timeB - timeA; // Newest first (larger values first)
+
+            case "oldest":
+              // Sort by date (oldest first)
+              const timeC = parseTimeAgo(
+                a.querySelector(".comment-time").textContent
+              );
+              const timeD = parseTimeAgo(
+                b.querySelector(".comment-time").textContent
+              );
+              return timeC - timeD; // Oldest first (smaller values first)
+
+            case "most-liked":
+              // Sort by likes count
+              const likesA =
+                parseInt(
+                  a.querySelector(".comment-likes").textContent.match(/\d+/)[0]
+                ) || 0;
+              const likesB =
+                parseInt(
+                  b.querySelector(".comment-likes").textContent.match(/\d+/)[0]
+                ) || 0;
+              return likesB - likesA; // Most likes first
+
+            default:
+              return 0;
+          }
+        });
+
+        // Remove all comments and re-append in sorted order
+        comments.forEach((comment) => {
+          commentsContainer.removeChild(comment);
+        });
+
+        comments.forEach((comment) => {
+          commentsContainer.appendChild(comment);
+        });
+
+        // Add a nice animation effect to sorted comments
+        anime({
+          targets: ".comment:not(.d-none)",
+          translateY: [5, 0],
+          opacity: [0.8, 1],
+          delay: anime.stagger(100),
+          duration: 300,
+          easing: "easeOutCubic",
+        });
+
+        // Reinitialize comment buttons after sorting
+        initializeCommentButtons();
+      }
+
+      // Helper function to convert time ago strings to numeric values for sorting
+      function parseTimeAgo(timeString) {
+        const hours = timeString.match(/(\d+)\s*hour/);
+        const days = timeString.match(/(\d+)\s*day/);
+
+        if (hours) {
+          return parseInt(hours[1]);
+        } else if (days) {
+          return parseInt(days[1]) * 24;
+        }
+        return 0;
+      }
+
+      // Function to animate the timer sliding in from the top and pushing content down
+      function animateTimerIn() {
+        // First remove the timer-hidden class
+        document
+          .querySelector(".sticky-container1")
+          .classList.remove("timer-hidden");
+
+        // Get the actual height of the timer for accurate animation
+        const timerHeight = document.querySelector(".timer").offsetHeight;
+
+        // Create a timeline for coordinated animations
+        const timeline = anime.timeline({
+          easing: "easeOutExpo",
+        });
+
+        // Add timer animation that pushes content down
+        timeline
+          .add({
+            targets: ".sticky-container1",
+            translateY: ["-100%", 0],
+            opacity: [0, 1],
+            height: [0, timerHeight], // Use actual height
+            duration: 800,
+            easing: "easeOutCubic",
+            begin: function () {
+              // Ensure timer is visible before animation
+              document.querySelector(".sticky-container1").style.display =
+                "block";
+            },
+          })
+          // Then add slight downward movement to the rest of the page content
+          .add(
+            {
+              targets: "header, .sections-wrapper",
+              translateY: [0, 0], // Changed from [0, timerHeight] to [0, 0] to prevent double spacing
+              duration: 600,
+              easing: "easeOutCubic",
+            },
+            "-=800"
+          ); // Start at the same time
+
+        return timeline;
+      }
+
+      // Handle section-specific animations (centralized in one place)
+      function handleSectionSpecificAnimations(sectionId) {
+        switch (sectionId) {
+          case "unaccepted":
+            anime({
+              targets: "#unaccepted .unaccepted-modal",
+              scale: [0.95, 1],
+              opacity: [0, 1],
+              duration: 600,
+              easing: "easeOutCubic",
+            });
+            break;
+
+          case "after-quiz":
+            // Animate title and subtitle
+            anime({
+              targets:
+                "#after-quiz .loading-title, #after-quiz .loading-subtitle",
+              opacity: [0, 1],
+              translateY: [15, 0],
+              duration: 600,
+              easing: "easeOutCubic",
+              delay: anime.stagger(150),
+            });
+
+            // Animate loading items one by one
+            anime({
+              targets: "#after-quiz .loading-item",
+              opacity: [0, 1],
+              translateX: [-15, 0],
+              duration: 600,
+              easing: "easeOutCubic",
+              delay: anime.stagger(300, { start: 300 }),
+            });
+            break;
+
+          case "final-page":
+            anime({
+              targets: "#final-page .final-page-title",
+              opacity: [0, 1],
+              translateY: [-20, 0],
+              duration: 600,
+              easing: "easeOutCubic",
+            });
+
+            anime({
+              targets: "#final-page p, #final-page .image-container",
+              opacity: [0, 1],
+              translateY: [15, 0],
+              duration: 600,
+              easing: "easeOutCubic",
+              delay: anime.stagger(100, { start: 200 }),
+            });
+
+            anime({
+              targets: "#final-page ol li",
+              opacity: [0, 1],
+              translateX: [15, 0],
+              duration: 600,
+              easing: "easeOutCubic",
+              delay: anime.stagger(150, { start: 400 }),
+            });
+
+            anime({
+              targets: "#final-page .continue-button",
+              opacity: [0, 1],
+              scale: [0.95, 1],
+              duration: 700,
+              easing: "easeOutCubic",
+              delay: 800,
+            });
+            break;
+
+          case "start-quiz":
+            // Animate question counter separately
+            anime({
+              targets: "#question-counter",
+              opacity: [0, 1],
+              translateX: [-50, 0],
+              duration: 600,
+              easing: "easeOutQuad",
+              delay: 300,
+            });
+
+            // Set up an observer specifically for quiz content
+            const quizModelsObserver = new MutationObserver(function (
+              mutations
+            ) {
+              mutations.forEach(function (mutation) {
+                if (
+                  mutation.type === "childList" &&
+                  mutation.addedNodes.length > 0
+                ) {
+                  // Check if quiz content has been added and not already animated
+                  const quizQuestion = document.querySelector(
+                    "#quiz-models .quiz-question"
+                  );
+                  const quizAnswers = document.querySelectorAll(
+                    "#quiz-models .quiz-answer"
+                  );
+
+                  if (
+                    quizQuestion &&
+                    !quizQuestion.hasAttribute("data-animated")
+                  ) {
+                    // Animate the question
+                    anime({
+                      targets: quizQuestion,
+                      opacity: [0, 1],
+                      translateY: [20, 0],
+                      duration: 800,
+                      easing: "easeOutQuad",
+                    });
+                    quizQuestion.setAttribute("data-animated", "true");
+                  }
+
+                  if (
+                    quizAnswers.length > 0 &&
+                    !quizAnswers[0].hasAttribute("data-animated")
+                  ) {
+                    // Animate the answers with staggered delay
+                    anime({
+                      targets: quizAnswers,
+                      opacity: [0, 1],
+                      translateY: [20, 0],
+                      duration: 800,
+                      easing: "easeOutQuad",
+                      delay: anime.stagger(150),
+                    });
+                    quizAnswers.forEach((answer) => {
+                      answer.setAttribute("data-animated", "true");
+                    });
+                  }
+                }
+              });
+            });
+
+            // Start observing quiz-models for changes
+            const quizModels = document.getElementById("quiz-models");
+            if (quizModels) {
+              quizModelsObserver.observe(quizModels, {
+                childList: true,
+                subtree: true,
+              });
+            }
+            break;
+        }
+      }
+
+      // Function to animate check marks when they are added to the DOM
+      function animateCheckmark(element) {
+        anime({
+          targets: element,
+          scale: [0, 1],
+          opacity: [0, 1],
+          rotate: [45, 0],
+          duration: 800,
+          easing: "easeOutElastic(1, 0.5)",
+        });
+      }
+
+      // Create a mutation observer to watch for added check marks
+      document.addEventListener("DOMContentLoaded", function () {
+        const loadingContainer = document.querySelector(".loading-container");
+        if (loadingContainer) {
+          const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+              if (mutation.type === "childList") {
+                mutation.addedNodes.forEach(function (node) {
+                  if (
+                    node.nodeType === 1 &&
+                    node.classList &&
+                    node.classList.contains("material-icons")
+                  ) {
+                    // Animate the newly added check mark
+                    animateCheckmark(node);
+                  }
+                });
+              }
+            });
+          });
+
+          // Start observing the loading container for added nodes
+          observer.observe(loadingContainer, {
+            childList: true,
+            subtree: true,
+          });
+        }
+      });
+
+      // Header entrance animation
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initially hide header
+        anime.set("header", {
+          opacity: 0,
+          translateY: -20,
+        });
+
+        // Animate header entrance
+        anime({
+          targets: "header",
+          opacity: 1,
+          translateY: 0,
+          duration: 700,
+          easing: "easeOutCubic",
+          delay: 200,
+        });
+
+        // Initial section entrance animation
+        anime.set("#before-quiz", {
+          opacity: 0,
+          translateY: 15,
+          scale: 0.98,
+        });
+
+        anime({
+          targets: "#before-quiz",
+          opacity: 1,
+          translateY: 0,
+          scale: 1,
+          duration: 700,
+          easing: "easeOutCubic",
+          delay: 400,
+        });
+      });
+
+      // Set up simplified section transitions to avoid duplicate animations
+      function setupSectionTransitions() {
+        // Store previous functions to call if they exist
+        const originalShowSection = window.showSection;
+
+        // Create simplified section transition function that doesn't duplicate animations
+        window.showSection = function (sectionToShow) {
+          // Find current visible section
+          let currentSection = null;
+          document
+            .querySelectorAll(".content-section")
+            .forEach(function (section) {
+              if (!section.classList.contains("d-none")) {
+                currentSection = section.id;
+              }
+            });
+
+          // Hide all sections first
+          document
+            .querySelectorAll(".content-section")
+            .forEach(function (section) {
+              section.classList.add("d-none");
+              section.style.opacity = "0";
+            });
+
+          // Show the requested section
+          const targetSection = document.getElementById(sectionToShow);
+          targetSection.classList.remove("d-none");
+
+          // Reset animation state for new section
+          anime.set("#" + sectionToShow, {
+            opacity: 0,
+            translateY: 20,
+            scale: 0.98,
+          });
+
+          // Call original showSection if it exists
+          if (typeof originalShowSection === "function") {
+            originalShowSection(sectionToShow);
+          }
+        };
+      }
+
+      // Logo animation
+      let logoRotations = 0;
+
+      // Make FAQ button interactive
+      document
+        .getElementById("faq-trigger")
+        .addEventListener("click", function () {
+          anime({
+            targets: this,
+            scale: [
+              { value: 1.2, duration: 100, easing: "easeInOutQuad" },
+              { value: 1, duration: 200, easing: "easeOutElastic(1, .5)" },
+            ],
+          });
+        });
+
+      // Add animations to START button
+      const startButton = document.getElementById("start-quiz-button");
+      if (startButton) {
+        // Continuous bounce animation for START button
+        anime({
+          targets: startButton,
+          scale: [
+            { value: 1.1, duration: 500, easing: "easeInOutCubic" },
+            { value: 1, duration: 500, easing: "easeOutElastic(1, .5)" },
+          ],
+          loop: true,
+          direction: "alternate",
+          easing: "easeInOutQuad",
+          loopComplete: function (anim) {
+            // Ensure animation continues infinitely without delay
+            anim.play();
+          },
+          loopBegin: function (anim) {
+            // Ensure animation stays active
+            if (!anim.began) anim.begin();
+          },
+        });
+
+        // Hover animations are no longer needed since we have the continuous bounce
+        // but we'll pause the bounce and apply a more dramatic scale on hover
+        startButton.addEventListener("mouseenter", function () {
+          // Get the running animation and pause it
+          const runningAnimation = anime.running[0];
+          if (runningAnimation) runningAnimation.pause();
+
+          anime({
+            targets: this,
+            scale: 1.2,
+            duration: 300,
+            easing: "easeOutElastic(1, .5)",
+          });
+        });
+
+        startButton.addEventListener("mouseleave", function () {
+          // Resume the paused animation
+          const runningAnimation = anime.running[0];
+          if (runningAnimation) runningAnimation.play();
+
+          anime({
+            targets: this,
+            scale: 1,
+            duration: 200,
+            easing: "easeOutQuad",
+          });
+        });
+      }
+
+      // Function to initialize comment buttons - can be called whenever comments change
+      function initializeCommentButtons() {
+        // Remove existing event listeners (to prevent duplicates)
+        document
+          .querySelectorAll(".comment:not(.d-none) .comment-action")
+          .forEach((button) => {
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+          });
+
+        // Add new event listeners
+        document
+          .querySelectorAll(".comment:not(.d-none) .comment-action")
+          .forEach((button) => {
+            button.addEventListener("click", function () {
+              // Animate the button when clicked
+              anime({
+                targets: this,
+                scale: [1, 1.2, 1],
+                duration: 300,
+                easing: "easeInOutQuad",
+              });
+
+              // If it's a like button, increment the count for demonstration
+              if (this.title === "Like") {
+                const likesElement =
+                  this.closest(".comment-actions").querySelector(
+                    ".comment-likes"
+                  );
+                const currentLikes = parseInt(
+                  likesElement.textContent.match(/\d+/)[0]
+                );
+                likesElement.innerHTML = `<i class="material-icons">favorite</i> ${
+                  currentLikes + 1
+                }`;
+
+                // Re-sort if sorted by most-liked
+                const sortCommentsSelect =
+                  document.getElementById("sort-comments");
+                if (
+                  sortCommentsSelect &&
+                  sortCommentsSelect.value === "most-liked"
+                ) {
+                  setTimeout(() => sortComments("most-liked"), 300);
+                }
+              }
+            });
+          });
+      }
+    </script>
+  </body>
+</html>
