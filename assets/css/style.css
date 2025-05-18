@@ -102,6 +102,29 @@ body {
   font-weight: bold;
 }
 
+/* Media queries for timer text responsiveness */
+@media (max-width: 768px) {
+  .timer-text {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .timer-text {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .timer {
+    padding: 4px 6px;
+  }
+  .timer-text {
+    font-size: 0.65rem;
+    padding: 2px 0;
+  }
+}
+
 /* Header */
 header {
   background: linear-gradient(to right, #222, #383838);
