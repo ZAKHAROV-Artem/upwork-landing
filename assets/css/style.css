@@ -442,7 +442,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  max-width: 800px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -463,6 +463,7 @@ header {
   animation: answerAppear 0.5s ease forwards;
   opacity: 0;
   transform: translateY(20px);
+  width: 100%;
 }
 
 .quiz-answer:nth-child(1) {
